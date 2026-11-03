@@ -1,0 +1,6 @@
+{
+  "name": "Portal de Matrícula Tecnológica",
+  "description": "Sistema profesional de registro y gestión de matrículas para cursos de tecnología y computación.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
