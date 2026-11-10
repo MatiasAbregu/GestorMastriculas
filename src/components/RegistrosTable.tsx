@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Printer, Edit2, Trash2, MapPin, FileText, Plus } from 'lucide-react';
+import { Search, Printer, Edit2, Trash2, MapPin, FileText, Plus, Award, UserCheck } from 'lucide-react';
 import { MatriculaData } from '../types/matricula';
 
 interface RegistrosTableProps {
@@ -8,6 +8,8 @@ interface RegistrosTableProps {
   onEdit: (matricula: MatriculaData) => void;
   onDelete: (matricula: MatriculaData) => void;
   onNewMatricula: () => void;
+  onManageGrades?: (matricula: MatriculaData) => void;
+  onSwitchToStudentPortal?: (matriculaId: string) => void;
 }
 
 export const RegistrosTable: React.FC<RegistrosTableProps> = ({
@@ -16,6 +18,8 @@ export const RegistrosTable: React.FC<RegistrosTableProps> = ({
   onEdit,
   onDelete,
   onNewMatricula,
+  onManageGrades,
+  onSwitchToStudentPortal,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -39,7 +43,7 @@ export const RegistrosTable: React.FC<RegistrosTableProps> = ({
             Registro General de Matrículas
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Total de {matriculas.length} alumnos registrados en el sistema
+            Total de {matriculas.length} alumnos registrados en el sistema académico
           </p>
         </div>
 
@@ -86,7 +90,7 @@ export const RegistrosTable: React.FC<RegistrosTableProps> = ({
                   <th className="py-3 px-4">Curso Asignado</th>
                   <th className="py-3 px-4">Fecha</th>
                   <th className="py-3 px-4">Distrito & Dirección</th>
-                  <th className="py-3 px-4 text-right">Acciones</th>
+                  <th className="py-3 px-4 text-right">Acciones de Coordinación</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -128,6 +132,31 @@ export const RegistrosTable: React.FC<RegistrosTableProps> = ({
 
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1">
+                        {/* Manage grades button */}
+                        {onManageGrades && (
+                          <button
+                            type="button"
+                            onClick={() => onManageGrades(item)}
+                            title="Gestionar Calificaciones del Alumno"
+                            className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80 rounded-lg hover:bg-indigo-100 transition-colors cursor-pointer mr-1"
+                          >
+                            <Award className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                            <span>Calificaciones</span>
+                          </button>
+                        )}
+
+                        {/* View in student portal */}
+                        {onSwitchToStudentPortal && (
+                          <button
+                            type="button"
+                            onClick={() => onSwitchToStudentPortal(item.id || '')}
+                            title="Ver Expediente en Portal del Estudiante"
+                            className="p-1.5 text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                          >
+                            <UserCheck className="w-4 h-4" />
+                          </button>
+                        )}
+
                         <button
                           type="button"
                           onClick={() => onViewComprobante(item)}
@@ -136,6 +165,7 @@ export const RegistrosTable: React.FC<RegistrosTableProps> = ({
                         >
                           <Printer className="w-4 h-4" />
                         </button>
+
                         <button
                           type="button"
                           onClick={() => onEdit(item)}
@@ -144,6 +174,7 @@ export const RegistrosTable: React.FC<RegistrosTableProps> = ({
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
+
                         <button
                           type="button"
                           onClick={() => onDelete(item)}
